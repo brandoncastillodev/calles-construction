@@ -1,4 +1,4 @@
-import "./app.css";
+import "./styles/app.css";
 import { useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";

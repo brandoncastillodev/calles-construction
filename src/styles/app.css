@@ -1,11 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Bowlby+One+SC&display=swap");
 @font-face {
   font-family: graduate;
-  src: url("./assets/Graduate-Regular.ttf");
+  src: url("../assets/Graduate-Regular.ttf");
 }
 @font-face {
   font-family: open-sans;
-  src: url("./assets/OpenSans.ttf");
+  src: url("../assets/OpenSans.ttf");
 }
 nav {
   background-color: #ffffff;
@@ -135,7 +135,7 @@ nav {
   }
   .home-desktop {
     display: grid;
-    grid-template-columns: 55% 45%;
+    grid-template-columns: 1fr 1fr;
   }
   .home-desktop .home-desktop-title {
     display: flex;
@@ -685,6 +685,7 @@ nav {
   }
   #gallery .image-card {
     width: 100%;
+    align-items: center;
   }
   #gallery figure {
     width: 100%;
