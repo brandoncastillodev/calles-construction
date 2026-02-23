@@ -33,17 +33,13 @@ function Gallery() {
   const [newImg, setNewImg] = useState("");
   const openBox = () => setConfirmBox(true);
   const closeBox = () => setConfirmBox(false);
-  const [loading2, setLoading2] = useState(true)
 
   //get images
   useEffect(() => {
     axios
       .get("https://calles-construction-back.onrender.com/api/images/")
-      .then((resp) => (
-        setGallery(resp.data))
-      .catch((err) => console.log(err)))
-
-        setLoading2(false)
+      .then((resp) => setGallery(resp.data))
+      .catch((err) => console.log(err));
   }, [estado]);
 
   // filtrar;
@@ -205,9 +201,7 @@ function Gallery() {
       {rubro && <h3>{rubro}</h3>}
 
       {/* imágenes */}
-      {setLoading2 ?<>
-        <p>Cargando, por favor espere.</p>
-      </> :finalJobs.length > 0 &&
+      {finalJobs.length > 0 &&
         finalJobs.map((img) => (
           <Image
             key={img.id}
@@ -216,7 +210,7 @@ function Gallery() {
             handleUpdate={handleUpdate}
             processing={processing}
           />
-      ))}
+        ))}
 
       {/* form */}
       {user.id && (
