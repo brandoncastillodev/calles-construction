@@ -40,40 +40,40 @@ function Jobs({ serv }) {
   const openBox = () => setConfirmBox(true);
   const closeBox = () => setConfirmBox(false);
 
-
   //get all jobs
   useEffect(() => {
-  setLoading2(true); // <-- ACTIVAR LOADING AL INICIAR
-  
-  axios
-    .get("https://calles-construction-back.onrender.com/api/jobs")
-    .then((resp) => {
-      const jobsData = resp.data;
-      
-      // Crear array de promesas
-      const jobsWithImagesPromises = jobsData.map(async (job) => {
-        const jid = job.id;
-        const imagesResp = await apiSegura.get(
-          `https://calles-construction-back.onrender.com/api/images/job/${jid}`
-        );
-        return { ...job, images: imagesResp.data };
-      });
+    axios
+      .get("https://calles-construction-back.onrender.com/api/jobs")
+      .then((resp) => {
+        const jobsData = resp.data;
+        
+        setLoading2(true)
 
-      // Esperar a que TODAS las promesas se resuelvan
-      Promise.all(jobsWithImagesPromises)
-        .then((finalJobs) => {
-          setJobs(finalJobs);
-          setLoading2(false); // <── DESACTIVAR LOADING SOLO CUANDO TODO TERMINÓ
-        })
-        .catch((e) => {
-          console.log(e);
-          setLoading2(false); // <── TAMBIÉN EN CASO DE ERROR
+        // Crear array de promesas
+        const jobsWithImagesPromises = jobsData.map(async (job) => {
+          const jid = job.id;
+          const imagesResp = await apiSegura.get(
+            `https://calles-construction-back.onrender.com/api/images/job/${jid}`
+          );
+          return { ...job, images: imagesResp.data };
         });
-    })
-    .catch((err) => {
-      console.log(err);
-      setLoading2(false); // <── TAMBIÉN EN CASO DE ERROR
-    });
+
+        // Esperar a que TODAS las promesas se resuelvan
+        Promise.all(jobsWithImagesPromises)
+          .then((finalJobs) => {
+            setJobs(finalJobs);
+            setLoading2(false); // <── DESACTIVAR LOADING SOLO CUANDO TODO TERMINÓ
+          })
+          .catch((e) => {
+            console.log(e);
+            setLoading2(false); // <── TAMBIÉN EN CASO DE ERROR
+          });
+
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading2(true); // <── TAMBIÉN EN CASO DE ERROR
+      });
 }, [estado]);
 
   //filtrar
@@ -145,6 +145,7 @@ function Jobs({ serv }) {
     setId(id);
     openBox();
   }
+
   const confirmDelete = async () => {
     closeBox();
     setProcessing(id);
@@ -269,17 +270,9 @@ function Jobs({ serv }) {
       </div>
 
       {rubro && <h2 className="rubro-title">{rubro}</h2>}
-
+       
       {loading2 ? (
-        <div style={{ margin: "0 auto" }}>
-          <ReactLoading
-            type={"spin"}
-            color="#0f4c61"
-            height={50}
-            width={50}
-            style={{ maringTop: "1rem" }}
-          />
-        </div>
+         <h3>Cargando, por favor espere.</h3>
       ) : (
         finalJobs.length > 0 &&
         finalJobs.map((job, i) => (
