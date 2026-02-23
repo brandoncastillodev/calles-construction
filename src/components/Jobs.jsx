@@ -40,27 +40,41 @@ function Jobs({ serv }) {
   const openBox = () => setConfirmBox(true);
   const closeBox = () => setConfirmBox(false);
 
+
   //get all jobs
   useEffect(() => {
-    axios
-      .get("https://calles-construction-back.onrender.com/api/jobs")
-      .then((resp) => {
-        const jobsData = resp.data;
-        const jobsWithImages = jobsData.map(async (job) => {
-          const jid = job.id;
-          const imagesResp = await apiSegura.get(
-            `https://calles-construction-back.onrender.com/api/images/job/${jid}`
-          );
-          setLoading2(false);
-          return { ...job, images: imagesResp.data };
-        });
+  setLoading2(true); // <-- ACTIVAR LOADING AL INICIAR
+  
+  axios
+    .get("https://calles-construction-back.onrender.com/api/jobs")
+    .then((resp) => {
+      const jobsData = resp.data;
+      
+      // Crear array de promesas
+      const jobsWithImagesPromises = jobsData.map(async (job) => {
+        const jid = job.id;
+        const imagesResp = await apiSegura.get(
+          `https://calles-construction-back.onrender.com/api/images/job/${jid}`
+        );
+        return { ...job, images: imagesResp.data };
+      });
 
-        Promise.all(jobsWithImages)
-          .then((finalJobs) => setJobs(finalJobs))
-          .catch((e) => console.log(e));
-      })
-      .catch((err) => console.log(err));
-  }, [estado]);
+      // Esperar a que TODAS las promesas se resuelvan
+      Promise.all(jobsWithImagesPromises)
+        .then((finalJobs) => {
+          setJobs(finalJobs);
+          setLoading2(false); // <── DESACTIVAR LOADING SOLO CUANDO TODO TERMINÓ
+        })
+        .catch((e) => {
+          console.log(e);
+          setLoading2(false); // <── TAMBIÉN EN CASO DE ERROR
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      setLoading2(false); // <── TAMBIÉN EN CASO DE ERROR
+    });
+}, [estado]);
 
   //filtrar
   useEffect(() => {
