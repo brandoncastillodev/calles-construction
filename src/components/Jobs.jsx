@@ -272,7 +272,14 @@ function Jobs({ serv }) {
       {rubro && <h2 className="rubro-title">{rubro}</h2>}
        
       {loading2 ? (
-         <h3>Cargando, por favor espere.</h3>
+         <div style={{ margin: "0 auto" }}>
+            <ReactLoading
+              type={"spin"}
+              color="#0f4c61"
+              height={50}
+              width={50}
+            />
+          </div>
       ) : (
         finalJobs.length > 0 &&
         finalJobs.map((job, i) => (

@@ -33,12 +33,16 @@ function Gallery() {
   const [newImg, setNewImg] = useState("");
   const openBox = () => setConfirmBox(true);
   const closeBox = () => setConfirmBox(false);
+  const [loading2, setLoading2] = useState(true)
 
   //get images
   useEffect(() => {
     axios
       .get("https://calles-construction-back.onrender.com/api/images/")
-      .then((resp) => setGallery(resp.data))
+      .then((resp) => {
+        setGallery(resp.data)
+        setLoading2(false)
+      })
       .catch((err) => console.log(err));
   }, [estado]);
 
@@ -201,7 +205,17 @@ function Gallery() {
       {rubro && <h3>{rubro}</h3>}
 
       {/* imágenes */}
-      {finalJobs.length > 0 &&
+
+      {loading2 ? 
+      <div>
+      <ReactLoading
+        type={"spin"}
+        color="#0f4c61"
+        height={50}
+        width={50}
+        />
+      </div>:
+      finalJobs.length > 0 &&
         finalJobs.map((img) => (
           <Image
             key={img.id}
