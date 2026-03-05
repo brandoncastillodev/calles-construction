@@ -774,6 +774,9 @@ nav {
   gap: 1rem;
   padding-bottom: 1rem;
 }
+#location .map-image {
+  aspect-ratio: 871/545;
+}
 #location .map-image img {
   border: 1px solid grey;
   border-radius: 11px;
